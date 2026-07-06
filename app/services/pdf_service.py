@@ -1,6 +1,7 @@
 from pathlib import Path
 from fastapi import HTTPException,UploadFile
 from core import paths
+
 class PDFService:
     async def save_pdf(self, file:UploadFile):
         if not file.filename.lower().endswith(".pdf"):

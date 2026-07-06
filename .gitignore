@@ -1,0 +1,13 @@
+# Uploaded files
+uploads/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
