@@ -15,5 +15,6 @@ async def upload_pdf(file: UploadFile = File(...)):
     return {
         "filename": file.filename,
         "status": "success",
-        "num_chunks": result["num_chunks"] 
+        "num_chunks": result["num_chunks"] ,
+        "embedding_dimension": result["embedding_dimension"]
     }
