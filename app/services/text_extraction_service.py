@@ -1,7 +1,7 @@
 from pathlib import Path
 import fitz
 
-class PDFTextExtractor:
+class TextExtractionService:
 
     def extract_text(self, pdf_path: Path) -> str:
         pages = []
