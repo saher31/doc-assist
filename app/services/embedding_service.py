@@ -1,14 +1,19 @@
+import logging
+
 import torch
 from sentence_transformers import SentenceTransformer
 from core import settings
 
+logger = logging.getLogger("uvicorn.error")
+
+
 class EmbeddingService:
     def __init__(self):
         self.device = "mps" if torch.backends.mps.is_available() else "cpu"
-        
-        print(f"Loading BGE-M3 model on {self.device}...")
+
+        logger.info("Loading BGE-M3 model on %s...", self.device)
         self.model = SentenceTransformer(settings.EMBEDDING_MODEL, device=self.device)
-        print("Embedding model loaded successfully!")
+        logger.info("Embedding model loaded successfully!")
     
     def embed_documents(self,chunks: list[str]) -> list[list[float]]:
         embeddings = self.model.encode(

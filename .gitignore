@@ -1,13 +1,28 @@
-# Uploaded files
-uploads/
-
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
 
-# Environment
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment Variables
 .env
+
+# Uploads
+uploads/
+
+# macOS
+.DS_Store
 
 # IDE
 .vscode/
 .idea/
+
+# Testing
+.pytest_cache/
+
+# Logs
+*.log
