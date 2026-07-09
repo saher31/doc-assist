@@ -19,7 +19,8 @@ class Settings(BaseSettings):
     EMBEDDING_DIMENSION: int
     TOP_K: int
     
-    EMINI_API_KEY: str | None = None
+    GEMINI_API_KEY: str | None = None
+    GEMINI_MODEL: str | None = None
   
     model_config = SettingsConfigDict(
         env_file=str(ENV_PATH),

@@ -3,4 +3,5 @@ from .text_extraction_service import TextExtractionService
 from .document_service import DocumentService
 from .chunk_service import ChunkService
 from .embedding_service import EmbeddingService
-from .query_service import QueryService    
+from .rag_service import RAGService
+
