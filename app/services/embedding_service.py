@@ -10,7 +10,7 @@ class EmbeddingService:
         self.model = SentenceTransformer(settings.EMBEDDING_MODEL, device=self.device)
         print("Embedding model loaded successfully!")
     
-    def generate_embeddings(self,chunks: list[str]) -> list[list[float]]:
+    def embed_documents(self,chunks: list[str]) -> list[list[float]]:
         embeddings = self.model.encode(
             chunks,
             normalize_embeddings=True,
@@ -18,3 +18,12 @@ class EmbeddingService:
             show_progress_bar=True
         )
         return embeddings.tolist()
+
+    def embed_query(self, query: str) -> list[float]:
+        embedding = self.model.encode(
+            query,
+            normalize_embeddings=True,
+            convert_to_numpy=True,
+        )
+        return embedding.tolist()
+ 

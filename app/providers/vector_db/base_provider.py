@@ -11,5 +11,9 @@ class BaseVectorDBProvider(ABC):
         pass 
     
     @abstractmethod
-    def search(self,query: str):
+    def search(self,query_embedding: list[float],limit: int = 5):
+        pass
+
+    @abstractmethod
+    def delete_by_source(self, source: str):
         pass

@@ -3,6 +3,7 @@ from qdrant_client.models import Distance,VectorParams,PointStruct
 from core.config import settings
 from providers.vector_db.base_provider import BaseVectorDBProvider
 from uuid import uuid4
+from qdrant_client.models import Filter, FieldCondition, MatchValue
 
 class QdrantProvider(BaseVectorDBProvider):
     
@@ -11,6 +12,7 @@ class QdrantProvider(BaseVectorDBProvider):
             host=settings.QDRANT_HOST,
             port=settings.QDRANT_PORT,
         )
+        self.create_collection()
 
     def create_collection(self):
         collections = self.client.get_collections().collections
@@ -18,7 +20,7 @@ class QdrantProvider(BaseVectorDBProvider):
         if settings.QDRANT_COLLECTION in collection_names:
             return
 
-        self.client.recreate_collection(
+        self.client.create_collection(
             collection_name=settings.QDRANT_COLLECTION,
             vectors_config=VectorParams(
                 size=settings.EMBEDDING_DIMENSION,
@@ -35,8 +37,8 @@ class QdrantProvider(BaseVectorDBProvider):
                     id=str(uuid4()),
                     vector=embedding,
                     payload={
-                        "chunk":chunk,
-                        "source":source
+                        "text": chunk,
+                        "source": source
                     }
                 )
             )
@@ -47,6 +49,22 @@ class QdrantProvider(BaseVectorDBProvider):
                 
             
 
-    def search(self,query: str):
-        pass    
-        
+    def search(self, query_embedding: list[float], limit: int = 5):
+        results = self.client.query_points(
+            collection_name=settings.QDRANT_COLLECTION,
+            query=query_embedding,
+            limit=limit
+        )
+        return results.points
+    def delete_by_source(self, source: str):
+        self.client.delete(
+            collection_name=settings.QDRANT_COLLECTION,
+            points_selector=Filter(
+                must=[
+                    FieldCondition(
+                        key="source",
+                        match=MatchValue(value=source)
+                    )
+                ]
+            )
+        )

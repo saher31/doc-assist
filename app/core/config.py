@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     QDRANT_PORT: int
     QDRANT_COLLECTION: str
     EMBEDDING_DIMENSION: int
+    TOP_K: int
     
     EMINI_API_KEY: str | None = None
   
