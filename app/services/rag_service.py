@@ -11,15 +11,18 @@ class RAGService:
         self.gemini_provider = GeminiProvider()
 
     def ask(self, question: str):
-        query_embedding = self.embedding_services.embed_query(question)
-        results = self.qdrant_provider.search(
-            query_embedding=query_embedding,
-            limit=settings.TOP_K)
-        context = self._build_context(results)
-        answer = self.gemini_provider.generate(
-            context=context,
-            question=question)
-        return {
+        try:
+            query_embedding = self.embedding_services.embed_query(question)
+            results = self.qdrant_provider.search(
+                query_embedding=query_embedding,
+                limit=settings.TOP_K)
+            
+            context = self._build_context(results)
+            answer = self.gemini_provider.generate(
+                context=context,
+                question=question)
+            return {
+            "status": "success",
             "answer": answer,
             "sources": list(
                 dict.fromkeys(
@@ -27,11 +30,13 @@ class RAGService:
                     for result in results
                 )
             )
-        }
+        }   
+
+        except Exception as e:
+            raise RuntimeError(f"Failed to answer question: {e}")
 
     def _build_context(self,results):
         return "\n\n".join(
             result.payload["text"]
             for result in results
         )
-    

@@ -50,12 +50,18 @@ class QdrantProvider(BaseVectorDBProvider):
             
 
     def search(self, query_embedding: list[float], limit: int = 5):
-        results = self.client.query_points(
-            collection_name=settings.QDRANT_COLLECTION,
-            query=query_embedding,
-            limit=limit
-        )
-        return results.points
+        try:
+            results = self.client.query_points(
+                collection_name=settings.QDRANT_COLLECTION,
+                query=query_embedding,
+                limit=limit,
+            )
+            return results.points
+
+        except Exception as e:
+            raise RuntimeError(f"Qdrant search failed: {e}")
+
+
     def delete_by_source(self, source: str):
         self.client.delete(
             collection_name=settings.QDRANT_COLLECTION,

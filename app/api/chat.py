@@ -1,5 +1,5 @@
 from fastapi import APIRouter 
-from schemas.chat import ChatRequest
+from schemas import ChatRequest, ChatResponse
 from services import RAGService
 
 chat_router = APIRouter(
@@ -9,9 +9,6 @@ chat_router = APIRouter(
 
 rag_service = RAGService()
 
-@chat_router.post("/ask")
-def chat(request: ChatRequest):
-
-    return rag_service.ask(
-        request.question
-    )
+@chat_router.post("/", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    return rag_service.ask(request.question)

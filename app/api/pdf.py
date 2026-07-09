@@ -1,15 +1,16 @@
 from fastapi import APIRouter, File ,UploadFile , HTTPException
 from services import  DocumentService
+from schemas import UploadResponse
 
 pdf_router = APIRouter(
     prefix="/pdf",
-    tags=["pdf"] 
+    tags=["pdf"], 
 )
 
 
 document_service = DocumentService()
 
-@pdf_router.post("/upload")
+@pdf_router.post("/upload", response_model=UploadResponse)
 async def upload_pdf(file: UploadFile = File(...)):
     result = await document_service.process_document(file)
     return {

@@ -9,9 +9,13 @@ class GeminiProvider(BaseLLmProvider):
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     def generate(self, context: str, question: str) -> str:
-        prompt = RAG_PROMPT.substitute(context=context, question=question)
-        response = self.client.models.generate_content(
-            model=settings.GEMINI_MODEL,
-            contents=prompt,
-        )
-        return response.text
+        try:
+            prompt = RAG_PROMPT.substitute(context=context, question=question)
+            response = self.client.models.generate_content(
+                model=settings.GEMINI_MODEL,
+                contents=prompt,
+            )
+            return response.text
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to generate answer: {e}")
